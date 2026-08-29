@@ -1,0 +1,49 @@
+{
+  "_format": "hh3-sol-build-info-1",
+  "id": "solc-0_8_28-bc0c76c2b3383cbbf540d923b33100d61bbe4fd7",
+  "solcVersion": "0.8.28",
+  "solcLongVersion": "0.8.28+commit.7893614a",
+  "compilerType": "solc",
+  "toolVersions": {
+    "hardhat": "3.14.0"
+  },
+  "userSourceNameMap": {
+    "contracts/voting.sol": "project/contracts/voting.sol"
+  },
+  "input": {
+    "language": "Solidity",
+    "settings": {
+      "evmVersion": "cancun",
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "outputSelection": {
+        "*": {
+          "": [
+            "ast"
+          ],
+          "*": [
+            "abi",
+            "evm.bytecode.linkReferences",
+            "evm.bytecode.object",
+            "evm.bytecode.opcodes",
+            "evm.bytecode.sourceMap",
+            "evm.deployedBytecode.immutableReferences",
+            "evm.deployedBytecode.linkReferences",
+            "evm.deployedBytecode.object",
+            "evm.deployedBytecode.opcodes",
+            "evm.deployedBytecode.sourceMap",
+            "evm.methodIdentifiers"
+          ]
+        }
+      },
+      "remappings": []
+    },
+    "sources": {
+      "project/contracts/voting.sol": {
+        "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.28;\r\n\r\ncontract Voting {\r\n\r\n    address public admin;\r\n\r\n    enum ElectionState {\r\n        NotStarted,\r\n        Started,\r\n        Ended\r\n    }\r\n\r\n    ElectionState public electionState;\r\n\r\n    struct Candidate {\r\n        uint256 id;\r\n        string name;\r\n        uint256 voteCount;\r\n    }\r\n\r\n    uint256 public candidateCount;\r\n    uint256 public totalVotes;\r\n\r\n    mapping(uint256 => Candidate) public candidates;\r\n    mapping(address => bool) public hasVoted;\r\n\r\n    constructor() {\r\n        admin = msg.sender;\r\n        electionState = ElectionState.NotStarted;\r\n    }\r\n\r\n    modifier onlyAdmin() {\r\n        require(msg.sender == admin, \"Only admin can perform this action\");\r\n        _;\r\n    }\r\n\r\n    modifier electionActive() {\r\n        require(\r\n            electionState == ElectionState.Started,\r\n            \"Election is not active\"\r\n        );\r\n        _;\r\n    }\r\n\r\n    function addCandidate(string memory _name) public onlyAdmin {\r\n        require(\r\n            electionState == ElectionState.NotStarted,\r\n            \"Cannot add candidate now\"\r\n        );\r\n\r\n        require(bytes(_name).length > 0, \"Candidate name required\");\r\n\r\n        candidateCount++;\r\n\r\n        candidates[candidateCount] = Candidate(\r\n            candidateCount,\r\n            _name,\r\n            0\r\n        );\r\n    }\r\n\r\n    function startElection() public onlyAdmin {\r\n        require(candidateCount >= 2, \"Add at least two candidates\");\r\n\r\n        require(\r\n            electionState == ElectionState.NotStarted,\r\n            \"Election already started\"\r\n        );\r\n\r\n        electionState = ElectionState.Started;\r\n    }\r\n\r\n    function vote(uint256 _candidateId) public electionActive {\r\n        require(\r\n            !hasVoted[msg.sender],\r\n            \"You have already voted\"\r\n        );\r\n\r\n        require(\r\n            _candidateId > 0 && _candidateId <= candidateCount,\r\n            \"Invalid candidate\"\r\n        );\r\n\r\n        hasVoted[msg.sender] = true;\r\n        candidates[_candidateId].voteCount++;\r\n        totalVotes++;\r\n    }\r\n\r\n    function endElection() public onlyAdmin {\r\n        require(\r\n            electionState == ElectionState.Started,\r\n            \"Election is not running\"\r\n        );\r\n\r\n        electionState = ElectionState.Ended;\r\n    }\r\n}"
+      }
+    }
+  }
+}
