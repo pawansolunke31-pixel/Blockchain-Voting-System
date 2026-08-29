@@ -5,6 +5,10 @@ artifacts/
 cache/
 coverage/
 dist/
-blockchain/ignition/deployments/
 *.log
 .DS_Store
+
+blockchain/ignition/deployments/
+blockchain/artifacts/
+blockchain/cache/
+blockchain/frontend/dist/
