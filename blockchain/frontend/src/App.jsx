@@ -1159,8 +1159,8 @@ function App() {
 
       <footer>
 
-        Blockchain Voting System
-        • Ethereum • Hardhat • React
+        <p>Blockchain Voting System • Ethereum • Hardhat • React</p>
+        <p className="dev-credit">DEV :- Pawan Solunke</p>
 
       </footer>
 
