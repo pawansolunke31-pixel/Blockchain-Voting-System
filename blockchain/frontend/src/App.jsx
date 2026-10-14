@@ -1159,8 +1159,13 @@ function App() {
 
       <footer>
 
-        <p>Blockchain Voting System • Ethereum • Hardhat • React</p>
-        <p className="dev-credit">DEV :- Pawan Solunke</p>
+        <p className="footer-system">Blockchain Voting System • Ethereum • Hardhat • React</p>
+        <div className="dev-credit-container">
+          <p className="dev-credit">DEV:- Pawan Solunke</p>
+          <p className="dev-tagline">
+            Website Developed by <span className="dev-name">Pawan Solunke</span>
+          </p>
+        </div>
 
       </footer>
 
